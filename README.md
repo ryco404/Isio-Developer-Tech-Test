@@ -1,33 +1,13 @@
 # Isio Developer Technical Test
 
-This test revolves around a refactoring excercise called The Gilded Rose.
+## Modifications
 
-It can be completed in any of the following programming languages:
-- C#
-- JavaScript
-- PHP
-- Python
-- TypeScript
-- Visual Basic
+I've made the following changes to the codebase:
 
-
-## How to complete the test
-
-Download the code in this repository and complete the test using your programming language of choice.
-For each language, there is a unit test file and an example simulation program to help get you started.
-
-When your solution is ready, send us the link to your submission (e.g. public Github repository or similar). 
-Don't forget to include any additional instructions on how to build or run your solution, especially if you have introduced any new frameworks.
-
-⚠️ Please do not submit PRs with test solutions directly against this source repository! They will be rejected.
-
-As the task is refactoring based, a solution is widley open to developer interpretation and offers the opportunity for a candidate to showcase their broader skillset. 
-
-There is no *correct* solution as such. Instead, you may be invited to justify your solution based on your approach and the technical design decisions you have made. You are welcome to include a new README file with your submission to assist with justification of your work.
-
-Feel free to go above and beyond the initial requirements specification if desired. For example, you may think of an additional requirement and illustrate how your refactored code allows you to implement this efficiently.
-
-You can spend as long as you like working on your submission, however a typical solution should take no more than 2-3 hours.
+- FIX: Used `TryParse` instead of `Parse` so strings passed in as argument to application don't cause exception, instead it uses the default value
+- REFACTOR: Introduced use of constants for Special Items and improved readability, removing repeated & unnecessary checks, and using correct naming convention for variables
+- FEATURE: Added new Table Prettifer to convert items to JSON so that they can formatted into a neat table structure
+- FEATURE: Added new Conjured item types that degrade in quality twice as fast as regular items
 
 ## Gilded Rose Requirements Specification
 

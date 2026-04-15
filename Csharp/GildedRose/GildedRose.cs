@@ -4,86 +4,74 @@ namespace GildedRoseKata;
 
 public class GildedRose
 {
-    IList<Item> Items;
+    private IList<Item> _items;
 
-    public GildedRose(IList<Item> Items)
+    public GildedRose(IList<Item> items)
     {
-        this.Items = Items;
+        _items = items;
     }
 
     public void UpdateQuality()
     {
-        for (var i = 0; i < Items.Count; i++)
+        for (var i = 0; i < _items.Count; i++)
         {
-            if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
+            var isAgedBrie = _items[i].Name == SpecialItemNames.AgedBrie;
+            var isBackstagePass = _items[i].Name == SpecialItemNames.BackstagePasses;
+
+            if (isAgedBrie || isBackstagePass)
             {
-                if (Items[i].Quality > 0)
+                var sellIn = _items[i].SellIn--;
+
+                if (sellIn > 0 || isAgedBrie)
                 {
-                    if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
+                    var qualityIncrease = 1;
+
+                    if (isBackstagePass)
                     {
-                        Items[i].Quality = Items[i].Quality - 1;
-                    }
-                }
-            }
-            else
-            {
-                if (Items[i].Quality < 50)
-                {
-                    Items[i].Quality = Items[i].Quality + 1;
-
-                    if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                    {
-                        if (Items[i].SellIn < 11)
+                        if (sellIn < 11)
                         {
-                            if (Items[i].Quality < 50)
-                            {
-                                Items[i].Quality = Items[i].Quality + 1;
-                            }
-                        }
-
-                        if (Items[i].SellIn < 6)
-                        {
-                            if (Items[i].Quality < 50)
-                            {
-                                Items[i].Quality = Items[i].Quality + 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-            {
-                Items[i].SellIn = Items[i].SellIn - 1;
-            }
-
-            if (Items[i].SellIn < 0)
-            {
-                if (Items[i].Name != "Aged Brie")
-                {
-                    if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                    {
-                        if (Items[i].Quality > 0)
-                        {
-                            if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                            {
-                                Items[i].Quality = Items[i].Quality - 1;
-                            }
+                            qualityIncrease += (sellIn < 6) ? 2 : 1;
                         }
                     }
                     else
                     {
-                        Items[i].Quality = Items[i].Quality - Items[i].Quality;
+                        qualityIncrease += (sellIn <= 0) ? 1 : 0;
+                    }
+
+                    while (qualityIncrease-- > 0 && _items[i].Quality < 50)
+                    {
+                        _items[i].Quality++;
                     }
                 }
                 else
                 {
-                    if (Items[i].Quality < 50)
+                    // RC: Backstage passes lose quality beyond sellby date
+                    _items[i].Quality = 0;
+                }
+            }
+            else
+            {
+                // RC: Not Sulfaras OR Brie OR Backstage Pass
+                if (_items[i].Name != SpecialItemNames.Sulfuras)
+                {
+                    _items[i].SellIn--;
+                    if (_items[i].Quality > 0)
                     {
-                        Items[i].Quality = Items[i].Quality + 1;
+                        var qualityDegradation = (_items[i].SellIn < 0) ? 2 : 1;
+                        var degredationScaleFactor = _items[i].Name == SpecialItemNames.Conjured ? 2 : 1;
+
+                        qualityDegradation *= degredationScaleFactor;
+
+                        // RC: Quality should never dip below 0
+                        _items[i].Quality -= System.Math.Min(qualityDegradation, _items[i].Quality);
                     }
                 }
             }
         }
+    }
+
+    public string ItemsToPrettifiedString()
+    {
+        return TablePrettifier.TabulateItems(_items);
     }
 }
