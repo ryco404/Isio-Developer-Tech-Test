@@ -8,6 +8,7 @@ I've made the following changes to the codebase:
 - REFACTOR: Introduced use of constants for Special Items and improved readability, removing repeated & unnecessary checks, and using correct naming convention for variables
 - FEATURE: Added new Table Prettifer to convert items to JSON so that they can formatted into a neat table structure
 - FEATURE: Added new Conjured item types that degrade in quality twice as fast as regular items
+- TEST: Added unit tests for both the main app and the new Table Prettifier
 
 ## Gilded Rose Requirements Specification
 
